@@ -1,5 +1,5 @@
 resources:
-  - name: "verygood-github"
+  - name: "verygoodgithub"
     type: "GitRepo"
     configuration:
       gitProvider: "GitHub"
@@ -36,7 +36,7 @@ pipelines:
             - name: "aws"
             - name: "GitHub"
           inputResources:
-            - name: "verygood-github"
+            - name: "verygoodgithub"
           outputResources:
             - name: "bar"
           runtime:
