@@ -10,6 +10,7 @@ public class OutsideMessageSpaceException extends RuntimeException {
 	/**
 	 * Construct a exception with a detail message that contains the
 	 * value which caused the exception.
+   *
 	 * @param value which is outside the message space
 	 */
 	public OutsideMessageSpaceException(String value) {

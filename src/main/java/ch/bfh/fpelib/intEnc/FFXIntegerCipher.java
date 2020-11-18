@@ -15,32 +15,35 @@ import ch.bfh.fpelib.messageSpace.IntegerMessageSpace;
 import ch.bfh.fpelib.messageSpace.OutsideMessageSpaceException;
 
 /**
- * This class is an implementation of the "FFX Mode of Operation for Format-Preserving Encryption": <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf">http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf</a><br><br>
- * FFXIntegerCipher is a Format Preserving Encryption (FPE) Cipher for numbers from zero to a maximum of 38 decimal digits (128 bits).<br>
+ * This class is an implementation of the "FFX Mode of Operation for Format-Preserving Encryption": <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf">http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf</a>
+ *
+ * <p>FFXIntegerCipher is a Format Preserving Encryption (FPE) Cipher for numbers from zero to a maximum of 38 decimal digits (128 bits).<br>
  * The FFXIntegerCipher encrypts a given input number from a specified range in such way, that the output value is also a number from the same range.
- * This range from zero to a maximum value is defined by an IntegerMessageSpace delivered in the constructor.<br/><br/>
+ * This range from zero to a maximum value is defined by an IntegerMessageSpace delivered in the constructor.</p>
  * 
- * Following a simple example how to use a FFXIntegerCipher. Here the aim is to encrypt the number 12345 into another number in the range of 0-1000000:<br/><br/>
+ * <p>Following a simple example how to use a FFXIntegerCipher. Here the aim is to encrypt the number 12345 into another number in the range of 0-1000000:</p>
  * 
- * <code>IntegerMessageSpace intMS = new IntegerMessageSpace(BigInteger.valueOf(1000000));<br>
- *		FFXIntegerCipher ffx = new FFXIntegerCipher(intMS);<br/><br/>
+ * <pre><code>IntegerMessageSpace intMS = new IntegerMessageSpace(BigInteger.valueOf(1000000));
+ *		FFXIntegerCipher ffx = new FFXIntegerCipher(intMS);
  *
- *		BigInteger plaintext = BigInteger.valueOf(12345); <br>
- *		BigInteger ciphertext = ffx.encrypt(plaintext,key,tweak); //possible result: 503752</code><br/><br/>
+ *		BigInteger plaintext = BigInteger.valueOf(12345);
+ *		BigInteger ciphertext = ffx.encrypt(plaintext,key,tweak); //possible result: 503752</code></pre>
  *
- * The ciphertext could now be for example 503752. 
- * By putting this number into the decrypt-method of the FFXIntegerCipher, with the same key and the same tweak, you will receive the plaintext, in this case 12345 back.<br/><br/>
+ * <p>The ciphertext could now be for example 503752.
+ * By putting this number into the decrypt-method of the FFXIntegerCipher, with the same key and the same tweak, you will receive the plaintext, in this case 12345 back.</p>
  * 
- * <code>BigInteger decPlaintext = ffx.decrypt(ciphertext, key,tweak); //result: 12345</code><br/><br/>
+ * <code>BigInteger decPlaintext = ffx.decrypt(ciphertext, key,tweak); //result: 12345</code>
  * 
- * The key is a random 16-byte-array and has to be the same for decrypting a value as he was for encrypting it.<br>
+ * <p>The key is a random 16-byte-array and has to be the same for decrypting a value as he was for encrypting it.<br>
  * The tweak is a value similar to an initialization vector (iv) or a salt on hashing in the sense that he prevents a deterministic encryption. 
- * A tweak can be arbitrary long and has to be the same for decrypting a value as he was for encrypting it.<br/><br/>
+ * A tweak can be arbitrary long and has to be the same for decrypting a value as he was for encrypting it.</p>
  * 
- * The parameters in the FFX algorithm are set as follows:<ul>
+ * <p>The parameters in the FFX algorithm are set as follows:</p>
+ * <ul>
  * <li>radix = 2 (number of symbols in alphabet: {0, 1})</li>
  * <li>feistel method = 2 (alternating feistel)</li>
- * <li>addition operator = 0 (characterwise addition (xor))</li></ul><br/>
+ * <li>addition operator = 0 (characterwise addition (xor))</li>
+ * </ul>
  */
 public class FFXIntegerCipher extends IntegerCipher {
 
@@ -52,7 +55,8 @@ public class FFXIntegerCipher extends IntegerCipher {
 	private static final byte RADIX = 2; 			//number of symbols in alphabet: {0, 1} = 2
 	
 	/**
-	 * Constructs a FFXIntegerCipher with the maximum value determined in the IntegerMessageSpace.<br>
+	 * Constructs a FFXIntegerCipher with the maximum value determined in the IntegerMessageSpace.
+   *
 	 * @param messageSpace IntegerMessageSpace to determine the number range of the input respectively output of the encryption/decryption
 	 * @throws IllegalArgumentException if the maximum value in the IntegerMessageSpace is bigger than representable with 128 bit
 	 */
@@ -63,7 +67,8 @@ public class FFXIntegerCipher extends IntegerCipher {
 	}
 	
 	/**
-	 * Constructs a FFXIntegerCipher with the maximum value determined by the parameter.<br>
+	 * Constructs a FFXIntegerCipher with the maximum value determined by the parameter.
+   *
 	 * @param maxValue Value to determine the number range of the input respectively output of the encryption/decryption
 	 * @throws IllegalArgumentException if the maximum value in the IntegerMessageSpace is bigger than representable with 128 bit
 	 */
@@ -92,6 +97,7 @@ public class FFXIntegerCipher extends IntegerCipher {
 	 * First method called from encrypt/decrypt methods. Checks input values for invalidities and throws an Exception if an argument is not valid.<br>
 	 * Encryption/Decryption takes place in a do-while-loop to be sure that the output is a value inside the given message space.<br> 
 	 * If not, the encrypted/decrypted value is encrypted/decrypted once again and so on. This procedure is called "Cycle Walking".
+   *
 	 * @param input plaintext to be encrypted or ciphertext to be decrypted
 	 * @param key randomly computed key 
 	 * @param tweak arbitrary bytes to prevent deterministic encryption
@@ -187,6 +193,7 @@ public class FFXIntegerCipher extends IntegerCipher {
 	
 	/**
 	 * In the round function the actual encryption/decryption with an AES CBC MAC happens. The input for this MAC is composed with a lot of parameters as defined in the FFX standard.
+   *
 	 * @param aesCipher a cipher object initalize to be used as AES CBC MAC
 	 * @param p precomputed part of the encryption
 	 * @param msBitLength bitlength of the message space which means amount of bits needed to represent the order of the message space
@@ -238,6 +245,7 @@ public class FFXIntegerCipher extends IntegerCipher {
 	
 	/**
 	 * Converts a given BigInteger into a BitSet.
+   *
 	 * @param big BigInteger to be converted
 	 * @return BitSet with the same value as the input BigInteger was
 	 */
@@ -253,6 +261,7 @@ public class FFXIntegerCipher extends IntegerCipher {
 	
 	/**
 	 * Converts a given BitSet into a BigInteger
+   *
 	 * @param bitset BitSet to be converted
 	 * @return BigInteger with the same value as the input BitSet was
 	 */
@@ -270,6 +279,7 @@ public class FFXIntegerCipher extends IntegerCipher {
 	 * Concatenates two byte arrays. The array firstBytes gives the smallest bytes. 
 	 * Example: firstBytes[0]=00001111, firstBytes[1]=11111111, furtherBytes[0]=11110000
 	 * returnArray[0]=00001111, returnArray[1]=11111111, returnArray[2]=11110000
+   *
 	 * @param firstBytes First ByteArray to be concatenated
 	 * @param furtherBytes Second ByteArray to be concatenated
 	 * @return Concatenated ByteArray
@@ -285,6 +295,7 @@ public class FFXIntegerCipher extends IntegerCipher {
 	
 	/**
 	 * Calculates the XOR value for two given ByteArrays.
+   *
 	 * @param array1 First ByteArray
 	 * @param array2 Second ByteArray
 	 * @return a ByteArray with the XOR value
@@ -300,10 +311,10 @@ public class FFXIntegerCipher extends IntegerCipher {
 	}
 	
 	/**
-	 * Determines the number of feistel round necessary for the encryption/decryption to ensure a high security guarantee. <br/>
-	 * The number of rounds depends on the amount of bits needed to represent the order of the message space (less bits -> more rounds).<br/><br/>
+	 * Determines the number of feistel round necessary for the encryption/decryption to ensure a high security guarantee.
+	 * The number of rounds depends on the amount of bits needed to represent the order of the message space (less bits -> more rounds).
 	 * 
-	 * The FFX standard has no mathematically proven security for message space sizes under 8 bits. For high security applications with small numbers the use of a tiny-space FPECipher will be needed.
+	 * <p>The FFX standard has no mathematically proven security for message space sizes under 8 bits. For high security applications with small numbers the use of a tiny-space FPECipher will be needed.</p>
 	 *
 	 * @param msBitLength bitlength of the message space which means amount of bits needed to represent the order of the message space
 	 * @return number of feistel rounds determined

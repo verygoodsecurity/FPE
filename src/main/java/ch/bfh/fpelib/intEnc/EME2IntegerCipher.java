@@ -13,30 +13,30 @@ import ch.bfh.fpelib.messageSpace.IntegerMessageSpace;
 import ch.bfh.fpelib.messageSpace.OutsideMessageSpaceException;
 
 /**
- * This class is an implementation of EME2 formerly known as EME*. Reference: "EME*: extending EME to handle arbitrary-length messages with associated data": <a href="http://eprint.iacr.org/2004/125.pdf">http://eprint.iacr.org/2004/125.pdf</a><br><br>
- * EME2 is a Format Preserving Encryption (FPE) Cipher for arbitrary long numbers with a minimum of 128 bits.<br>
+ * This class is an implementation of EME2 formerly known as EME*. Reference: "EME*: extending EME to handle arbitrary-length messages with associated data": <a href="http://eprint.iacr.org/2004/125.pdf">http://eprint.iacr.org/2004/125.pdf</a>
+ *
+ * <p>EME2 is a Format Preserving Encryption (FPE) Cipher for arbitrary long numbers with a minimum of 128 bits.<br>
  * The EME2IntegerCipher encrypts a given input number from a specified range in such way, that the output value is also a number from the same range.
- * This range is defined by an IntegerMessageSpace delivered in the constructor.<br/><br/>
+ * This range is defined by an IntegerMessageSpace delivered in the constructor.</p>
  *
- * Following a simple example how to use a EME2Cipher. The goal in this example is to encrypt the number 12345 into another number in the range given by the IntegerMessageSpace:<br/><br/>
+ * <p>Following a simple example how to use a EME2Cipher. The goal in this example is to encrypt the number 12345 into another number in the range given by the IntegerMessageSpace:</p>
  * 
- * <code>
- * 		IntegerMessageSpace intMS = new IntegerMessageSpace(messageSpace.getOrder());//messageSpace contains more than 2^128 values<br> 
- *		EME2IntegerCipher eme2 = new EME2IntegerCipher(intMS);<br><br>
+ * <pre><code>
+ * 		IntegerMessageSpace intMS = new IntegerMessageSpace(messageSpace.getOrder());//messageSpace contains more than 2^128 values
+ *		EME2IntegerCipher eme2 = new EME2IntegerCipher(intMS);
  *
- *		BigInteger plaintext = BigInteger.valueOf(12345); <br>
- *		BigInteger ciphertext = eme2.encrypt(plaintext,key,tweak); //possible result: 50376352154789653152</code><br/><br/>
+ *		BigInteger plaintext = BigInteger.valueOf(12345);
+ *		BigInteger ciphertext = eme2.encrypt(plaintext,key,tweak); //possible result: 50376352154789653152</code></pre>
  *
- * The ciphertext could now be for example 50376352154789653152. 
- * By putting this number into the decrypt-method of the EME2IntegerCipher, with the same key and the same tweak, you will receive the plaintext, in this case 12345, back.<br/><br/>
+ * <p>The ciphertext could now be for example 50376352154789653152.
+ * By putting this number into the decrypt-method of the EME2IntegerCipher, with the same key and the same tweak, you will receive the plaintext, in this case 12345, back.</p>
  * 
- * <code>BigInteger decPlaintext = eme2.decrypt(ciphertext, key,tweak); //result: 12345</code><br/><br/>
+ * <pre><code>BigInteger decPlaintext = eme2.decrypt(ciphertext, key,tweak); //result: 12345</code></pre>
  * 
- * The keyLength parameter in the constructor specifies if you want to use AES-128 or AES-256. Be aware that there is a restriction on JDKs for AES-256 and it has first to be unlocked in the policy rules.
+ * <p>The keyLength parameter in the constructor specifies if you want to use AES-128 or AES-256. Be aware that there is a restriction on JDKs for AES-256 and it has first to be unlocked in the policy rules.
  * The key has to be the same for decrypting a value as he was for encrypting it.<br>
  * The tweak is a value similar to an initialization vector (iv) or a salt on hashing in the sense that he prevents a deterministic encryption. 
- * A tweak can be arbitrary long, even zero if no associated data is available, and has to be the same for decrypting a value as he was for encrypting it.<br/><br/>
- * 
+ * A tweak can be arbitrary long, even zero if no associated data is available, and has to be the same for decrypting a value as he was for encrypting it.</p>
  */
 public class EME2IntegerCipher extends IntegerCipher {
 	
@@ -45,7 +45,8 @@ public class EME2IntegerCipher extends IntegerCipher {
 
 	
 	/**
-	 * Constructs a EME2IntegerCipher with the maximum value determined in the IntegerMessageSpace.<br>
+	 * Constructs a EME2IntegerCipher with the maximum value determined in the IntegerMessageSpace.
+   *
 	 * @param messageSpace IntegerMessageSpace to determine the number range of the input respectively output of the encryption/decryption
 	 * @throws IllegalArgumentException if the maximum value in the IntegerMessageSpace is smaller than representable with 128 bits
 	 */
@@ -55,7 +56,8 @@ public class EME2IntegerCipher extends IntegerCipher {
 	}
 	
 	/**
-	 * Constructs a EME2IntegerCipher with the maximum value determined by the parameter.<br>
+	 * Constructs a EME2IntegerCipher with the maximum value determined by the parameter.
+   *
 	 * @param maxValue Value to determine the number range of the input respectively output of the encryption/decryption
 	 * @throws IllegalArgumentException if the maximum value in the IntegerMessageSpace is smaller than representable with 128 bits
 	 */
@@ -64,7 +66,8 @@ public class EME2IntegerCipher extends IntegerCipher {
 	}
 	
 	/**
-	 * Constructs a EME2IntegerCipher with the maximum value determined in the IntegerMessageSpace.<br>
+	 * Constructs a EME2IntegerCipher with the maximum value determined in the IntegerMessageSpace.
+   *
 	 * @param messageSpace IntegerMessageSpace to determine the number range of the input respectively output of the encryption/decryption
 	 * @param keyLength set explicit key length to 128 or 256 bit. Default is 128 bit to support interoperability because JCE without unlimited strength policy files is restricted to this size.
 	 * @throws IllegalArgumentException if the maximum value in the IntegerMessageSpace is smaller than representable with 128 bits
@@ -77,7 +80,8 @@ public class EME2IntegerCipher extends IntegerCipher {
 	}
 	
 	/**
-	 * Constructs a EME2IntegerCipher with the maximum value determined by the parameter.<br>
+	 * Constructs a EME2IntegerCipher with the maximum value determined by the parameter.
+   *
 	 * @param maxValue Value to determine the number range of the input respectively output of the encryption/decryption
 	 * @param keyLength set explicit key length to 128 or 256 bit. Default is 128 bit to support interoperability because JCE without unlimited strength policy files is restricted to this size.
 	 * @throws IllegalArgumentException if the maximum value in the IntegerMessageSpace is smaller than representable with 128 bits
@@ -107,7 +111,8 @@ public class EME2IntegerCipher extends IntegerCipher {
 	 * First method called from encrypt/decrypt methods. Checks input values for invalidities and throws an Exception if an argument is not valid.<br>
 	 * Encryption/Decryption takes place in a do-while-loop to be sure that the output is a value inside the given message space.<br> 
 	 * If not, the encrypted/decrypted value is encrypted/decrypted once again and so on. This procedure is called "Cycle Walking".
-	 * @param plaintext plaintext of arbtriray length. Will be padded to length of message space which is in minimum 16 bytes
+   *
+	 * @param plaintext plaintext of arbitrary length. Will be padded to length of message space which is in minimum 16 bytes
 	 * @param key encryption key
 	 * @param tweak value of the associated data of arbitrary byte length (zero or more bytes)
 	 * @param encryption true if this method is called for an encryption, false if for a decryption
@@ -145,7 +150,8 @@ public class EME2IntegerCipher extends IntegerCipher {
 	/**
 	 * The EME2 cipher function is based on an encrypt-mix-encrypt approach. First encrypt the input data, than create masks with the encrypted plaintext and the tweak to xor the data ("mixing"). At the end 
 	 * encrypt the whole data again. If the input is not a multiple of 16 bytes, a padding is applied during the function.
-	 * @param input plaintext or ciphertext of arbtriray length. Will be padded to length of message space which is in minimum 16 bytes
+   *
+	 * @param input plaintext or ciphertext of arbitrary length. Will be padded to length of message space which is in minimum 16 bytes
 	 * @param key encryption key
 	 * @param tweak value of the associated data, of arbitrary byte length (zero or more bytes)
 	 * @param encryption true if this method is called for an encryption, false if for a decryption
@@ -332,6 +338,7 @@ public class EME2IntegerCipher extends IntegerCipher {
 	/**
 	 * Pads a byte array with less than 16 bytes to 16 bytes with the first bit set (according to definition of EME2). 
 	 * If input is already 16 bytes or bigger it will returned immediately.
+   *
 	 * @param input byte array smaller than 16 bytes
 	 * @return 16 bytes long byte array
 	 */
@@ -346,6 +353,7 @@ public class EME2IntegerCipher extends IntegerCipher {
 	
 	/**
 	 * Multiplies a 16-byte input value by a primitive element α in the field GF(2^128) (Galois Field Multiplication)
+   *
 	 * @param input ByteArray to be multiplied
 	 * @return Multiplied ByteArray
 	 */
@@ -364,6 +372,7 @@ public class EME2IntegerCipher extends IntegerCipher {
 	
 	/**
 	 * Calculates the XOR value for two given ByteArrays with the same length.
+   *
 	 * @param array1 First ByteArray
 	 * @param array2 Second ByteArray
 	 * @return a ByteArray with the XOR value

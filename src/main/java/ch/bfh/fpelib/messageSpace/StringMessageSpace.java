@@ -19,39 +19,41 @@ import dk.brics.automaton.Transition;
  * by an deterministic finite-state automaton (DFA) or a regular expression.
  * This class implements the rank/unrank approach described in chapter 5 in
  * <a href="https://eprint.iacr.org/2009/251.pdf">https://eprint.iacr.org/2009/251.pdf</a>
- * (With the exception that the rank is not only defined over one slice but all.)<br/>
+ * (With the exception that the rank is not only defined over one slice but all.)
  * For the definition of the automaton, the regular expression and the conversion from
  * the regular expression to a DFA, the <a href="http://www.brics.dk/automaton">dk.brics.automaton library</a> is used.
- * The syntax of regular expressions that are supported are described <a href="http://www.brics.dk/automaton/doc/index.html?dk/brics/automaton/RegExp.html">here</a>.<br/><br/>
+ * The syntax of regular expressions that are supported are described <a href="http://www.brics.dk/automaton/doc/index.html?dk/brics/automaton/RegExp.html">here</a>.
  * 
- * A messages space is finite but with regular expressions it is possible to define infinite languages. 
+ * <p>A messages space is finite but with regular expressions it is possible to define infinite languages.
  * If the regular expression operation * or + is used or the word length is longer than the default of 128 characters,
- * the maxWordLength parameter of the constructor should be used to define the maximum length of the string.<br/><br/>
+ * the maxWordLength parameter of the constructor should be used to define the maximum length of the string.</p>
  * 
- * Example 1 (regular expression):<code><br/>
- * String swissZIPCode = "([1-468][0-9]|[57][0-7]|9[0-6])[0-9]{2}";<br/>
- * String validZIP = "3063";<br/>
- * String invalidZIP = "5802";<br/>
- * StringMessageSpace ms = new StringMessageSpace(swissZIPCode);<br/><br/>
+ * <p>Example 1 (regular expression):</p>
+ * <pre><code>
+ * String swissZIPCode = "([1-468][0-9]|[57][0-7]|9[0-6])[0-9]{2}";
+ * String validZIP = "3063";
+ * String invalidZIP = "5802";
+ * StringMessageSpace ms = new StringMessageSpace(swissZIPCode);
  * 
- * //valid zip code<br/>
- * BigInteger order = ms.getOrder(); //Returns 8300<br/>
- * BigInteger rank = ms.rank(validZIP); //Returns 2063<br/>
- * String zip = ms.unrank(rank); //Returns "3063"<br/><br/>
+ * //valid zip code
+ * BigInteger order = ms.getOrder(); //Returns 8300
+ * BigInteger rank = ms.rank(validZIP); //Returns 2063
+ * String zip = ms.unrank(rank); //Returns "3063"
  * 
- * //invalid zip code which is outside the message space<br/>
- * try {<br/>
- * 	  ms.rank(invalidZIP);<br/>
- * }<br/>
- * catch (OutsideMessageSpaceException ex) {<br/>
- * 	  //invalid zip code throws exception<br/>
- * }<br/>
- * </code><br/>
+ * //invalid zip code which is outside the message space
+ * try {
+ * 	  ms.rank(invalidZIP);
+ * }
+ * catch (OutsideMessageSpaceException ex) {
+ * 	  //invalid zip code throws exception
+ * }
+ * </code></pre>
  * 
- * Example 2 (regular expression with *):<code><br>
- * //Binary string starting with 0 and maximal length of 3.<br>
- * //Thus the elements are {0, 00, 01, 000, 001, 010, 011}.<br>
- * StringMessageSpace ms = new StringMessageSpace("0[0-1]*", 3);</code>
+ * <p>Example 2 (regular expression with *):</p>
+ * <pre><code>
+ * //Binary string starting with 0 and maximal length of 3.
+ * //Thus the elements are {0, 00, 01, 000, 001, 010, 011}.
+ * StringMessageSpace ms = new StringMessageSpace("0[0-1]*", 3);</code></pre>
  */
 public class StringMessageSpace extends MessageSpace<String> {
 	
@@ -65,6 +67,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	/**
 	 * Constructs a string message spaces defined by a regular expression.
 	 * The default maximum word length of 128 characters is used.
+   *
 	 * @param regexp the regular expression (<a href="http://www.brics.dk/automaton/doc/index.html?dk/brics/automaton/RegExp.html">Format</a>)
 	 */
 	public StringMessageSpace(String regexp) {
@@ -73,6 +76,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	
 	/**
 	 * Constructs a string message spaces defined by a regular expression.
+   *
 	 * @param regexp the regular expression (<a href="http://www.brics.dk/automaton/doc/index.html?dk/brics/automaton/RegExp.html">Format</a>)
 	 * @param maxWordLength defines the maximum word length
 	 */
@@ -83,6 +87,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	/**
 	 * Constructs a string message spaces defined by a DFA.
 	 * The default maximum word length of 128 characters is used.
+   *
 	 * @param dfa the DFA which defines the string format
 	 */
 	public StringMessageSpace(Automaton dfa) {
@@ -91,6 +96,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	
 	/**
 	 * Constructs a string message spaces defined by a DFA.
+   *
 	 * @param dfa the DFA which defines the string format
 	 * @param maxWordLength defines the maximum word length
 	 */
@@ -138,6 +144,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	/**
 	 * Part of the initialization of the message space:
 	 * Precomputes a table which allows fast rank and unrank operations.
+   *
 	 * @param maxWordLength defines the maximum word length
 	 */
 	private void buildTable(int maxWordLength) {
@@ -181,6 +188,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	/**
 	 * Returns the order of this message space,
 	 * therefore the number of possible strings in the domain.
+   *
 	 * @return the order of the message space
 	 */
 	@Override
@@ -191,6 +199,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	/**
 	 * Returns true if the language of the automaton that defines this
 	 * message space is finite.
+   *
 	 * @return True if DFA is finite, otherwise false
 	 */
 	public boolean isFinite() {
@@ -200,6 +209,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	/**
 	 * Returns the position of an element inside the message space.
 	 * The order of the elements is lexicographical.
+   *
 	 * @param value is the string that should be ranked
 	 * @return the position of the value inside the message space
 	 * @throws OutsideMessageSpaceException if the value is outside the message space
@@ -233,6 +243,7 @@ public class StringMessageSpace extends MessageSpace<String> {
 	/**
 	 * Inverse function of rank.
 	 * Returns for a given position the corresponding element.
+   *
 	 * @param rank position of an element
 	 * @return the string element at the specified position
 	 * @throws OutsideMessageSpaceException if the rank is outside the message space

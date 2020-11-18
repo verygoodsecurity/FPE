@@ -24,20 +24,20 @@ import ch.bfh.fpelib.messageSpace.OutsideMessageSpaceException;
  * Phillip Rogaway states in http://web.cs.ucdavis.edu/~rogaway/papers/synopsis.pdf (March 27, 2010)
  * that the Knuth shuffle is a possibility to build a tiny space FPE but gives no detail on a possible implementation.
  * 
- * The limit between tiny-space- and small-space-schemes is not fixed. It is recommended to use KnuthShuffleCipher
+ * <p>The limit between tiny-space- and small-space-schemes is not fixed. It is recommended to use KnuthShuffleCipher
  * for up to 10 bits (one or two digit decimal numbers) and switch to FFXIntegerCipher for larger message spaces.
  * The advantage of the KnuthShuffleCipher is that the security can be proven mathematically. There is no known attack
  * against FFXIntegerCipher with tiny domains but also no provable security guarantees.
- * The disadvantage compared to FFXIntegerCipher is that KnuthShuffleCipher is less performant with large message spaces.
+ * The disadvantage compared to FFXIntegerCipher is that KnuthShuffleCipher is less performant with large message spaces.</p>
  * 
- * The Knuth shuffle  algorithm is taken from http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#Modern_method
+ * <p>The Knuth shuffle  algorithm is taken from http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#Modern_method
  * and is the key part of the class. An important variance is that one does not want the key to be truly random
  * but generated deterministically in order to reproduce the permutation for the decryption.
  * This deterministic random number is generated with AES based on a fixed encryption string. Key and tweak provides the
- * needed randomned for the permutation.
+ * needed randomization for the permutation.</p>
  * 
- * At first use, for every key and tweak a permutation table is created. A permutation table defines which plain text is
- * mapped to which cipher text and vice versa. Every subsequent encryption/decryption is then a fast table lookup.
+ * <p>At first use, for every key and tweak a permutation table is created. A permutation table defines which plain text is
+ * mapped to which cipher text and vice versa. Every subsequent encryption/decryption is then a fast table lookup.</p>
  */
 public class KnuthShuffleCipher extends IntegerCipher {
 	
@@ -87,6 +87,7 @@ public class KnuthShuffleCipher extends IntegerCipher {
 	/**
 	 * Performs encryption/decryption. I.e. lookup value in permutation table and return
 	 * counterpart. When permutation table does not yet exists, it is generated.
+   *
 	 * @param value plain-/ciphertext which is encrypted respectively decrypted 
 	 * @param key secret used generate permutation
 	 * @param tweak random bytes to prevent deterministic encryption
@@ -117,14 +118,17 @@ public class KnuthShuffleCipher extends IntegerCipher {
 	 * Generates the permutation table by means of the Knuth shuffle.
 	 * The algorithm is taken from http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#Modern_method.
 	 * To shuffle an array a of n elements (indices 0..n-1):
-	 *   for i from n − 1 downto 1 do
+	 * <code><pre>  for i from n − 1 downto 1 do
 	 *     j ← random integer with 0 ≤ j ≤ i
-	 *     exchange a[j] and a[i]
-	 * For the provided key/tweak pair a permutation table is created respectively
+	 *     exchange a[j] and a[i]</pre></code>
+	 * <p>For the provided key/tweak pair a permutation table is created respectively
 	 * one with the plain text and one with the cipher text as lookup key.
-	 * The random integer j is deterministically derived with AES:
-	 * 1) The 16 byte block "Hello World!! :D" is encrypted with key/tweak.
-	 * 2) The output is calculated modulo (i+1) to cover the range 0 ≤ j ≤ i.
+	 * The random integer j is deterministically derived with AES:</p>
+   * <ol>
+   *   <li>The 16 byte block "Hello World!! :D" is encrypted with key/tweak.</li>
+   *   <li>The output is calculated modulo (i+1) to cover the range 0 ≤ j ≤ i.</li>
+   * </ol>
+   *
 	 * @param key secret used generate permutation
 	 * @param tweak random bytes to prevent deterministic encryption
 	 */
@@ -180,6 +184,7 @@ public class KnuthShuffleCipher extends IntegerCipher {
 	/**
 	 * When tweak do not have a length of 16 byte,
 	 * use PKCS#5 (PBKDF2 with SHA1-HMAC) derive it from provided tweak.
+   *
 	 * @param length desired key length in bytes
 	 */
 	private byte[] deriveTweak(byte[] tweak) {

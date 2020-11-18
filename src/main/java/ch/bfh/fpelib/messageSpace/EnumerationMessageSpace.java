@@ -13,6 +13,7 @@ import java.util.Map;
  * The user of this class has precise control over the position of each
  * element in the list before construction and is responsible to retain this order
  * for every subsequent use.
+ *
  * @param <M> type of the elements of the enumList
  */
 public class EnumerationMessageSpace<M> extends MessageSpace<M> {
@@ -24,6 +25,7 @@ public class EnumerationMessageSpace<M> extends MessageSpace<M> {
 	 * Constructs a enumList messages space.
 	 * The enumList must not be empty.
 	 * It is then copied to prevent modifications and retain the order.
+   *
 	 * @param enumList List with elements of the message space.
 	 */
 	public EnumerationMessageSpace(List<M> enumeration) {
@@ -42,6 +44,7 @@ public class EnumerationMessageSpace<M> extends MessageSpace<M> {
 	/**
 	 * Returns the order of this message space,
 	 * therefore the number of elements in the enumList
+   *
 	 * @return the order of the message space
 	 */
 	@Override
@@ -51,6 +54,7 @@ public class EnumerationMessageSpace<M> extends MessageSpace<M> {
 
 	/**
 	 * Returns the position of an element inside the message space.
+   *
 	 * @param value is the element that should be ranked
 	 * @return the position of the element inside the message space
 	 * @throws OutsideMessageSpaceException if the value is outside the message space
@@ -65,6 +69,7 @@ public class EnumerationMessageSpace<M> extends MessageSpace<M> {
 	/**
 	 * Inverse function of rank.
 	 * Returns for a given position the corresponding element.
+   *
 	 * @param rank position of an element
 	 * @return the element at the specified position
 	 * @throws OutsideMessageSpaceException if the rank is outside the message space

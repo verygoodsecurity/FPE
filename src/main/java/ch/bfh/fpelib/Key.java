@@ -29,6 +29,7 @@ public class Key {
 	
 	/**
 	 * Constructs a new key class by providing a base key.
+   *
 	 * @param key base key
 	 */
 	public Key(byte[] key) {
@@ -39,7 +40,8 @@ public class Key {
 	
 	/**
 	 * Checks if the AES key length is allowed on the current system. On most systems 128 bit is the highest allowed key length.
-	 * Key in JCE without unlimited strength policy files is restricted to this size due to judical reasons.
+	 * Key in JCE without unlimited strength policy files is restricted to this size due to judicial reasons.
+   *
 	 * @param keyLength Length to check 
 	 * @return true if provided key length is allowed, otherwise false
 	 */
@@ -54,7 +56,8 @@ public class Key {
 	/**
 	 * Returns a key with the specified length.
 	 * If the length is equal to the one of the provided base key, that is returned unaltered.
-	 * If not, a new key is derived from the provided base key. 
+	 * If not, a new key is derived from the provided base key.
+   *
 	 * @param length Length of the key in bytes
 	 * @return key with the specified length
 	 */
@@ -66,6 +69,7 @@ public class Key {
 	/**
 	 * When key is too long or too short, use PKCS#5 (PBKDF2 with SHA1-HMAC)
 	 * to generate a key of appropriate length.
+   *
 	 * @param length desired key length in bytes
 	 */
 	private void deriveKey(int length) {
