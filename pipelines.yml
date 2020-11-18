@@ -5,21 +5,23 @@ resources:
       gitProvider: "GitHub"
       path: "verygoodsecurity/FPE"
       branches:
-        include: "*"
+        include: ".*"
       buildOn:
         commit: true
         pullRequestCreate: false
         pullRequestClose: false
-        releaseRequestCreate: false
         tagCreate: false
   - name: "bar"
     type: "BuildInfo"
     configuration:
-      sourceArtifactory: "foobar"
+      sourceArtifactory: "mine"
+      buildName: "foo"
+      buildNumber: 1
 pipelines:
   - name: "foo"
     configuration:
-      environmentVariables: {}
+      environmentVariables:
+        readOnly: true
     steps:
       - name: "step_1"
         type: "MvnBuild"
@@ -50,9 +52,9 @@ pipelines:
             - "mvn --version"
           onComplete:
             - "save_tests $res_java_app_resourcePath/target/surefire-reports/"
-      - name: "publish_build"
-        type: "PublishBuildInfo"
-        configuration: {}
-      - name: "promote_build"
-        type: "PromoteBuild"
-        configuration: {}
+#      - name: "publish_build"
+#        type: "PublishBuildInfo"
+#        configuration: {}
+#      - name: "promote_build"
+#        type: "PromoteBuild"
+#        configuration: {}
