@@ -112,8 +112,7 @@ public class EME2IntegerCipher extends IntegerCipher {
 	 * Encryption/Decryption takes place in a do-while-loop to be sure that the output is a value inside the given message space.<br> 
 	 * If not, the encrypted/decrypted value is encrypted/decrypted once again and so on. This procedure is called "Cycle Walking".
    *
-	 * @param plaintext plaintext of arbitrary length. Will be padded to length of message space which is in minimum 16 bytes
-	 * @param key encryption key
+	 * @param input plaintext of arbitrary length. Will be padded to length of message space which is in minimum 16 bytes
 	 * @param tweak value of the associated data of arbitrary byte length (zero or more bytes)
 	 * @param encryption true if this method is called for an encryption, false if for a decryption
 	 * @throws IllegalArgumentException if input is null or negative, key is not 48 or 64 bytes or tweak is null

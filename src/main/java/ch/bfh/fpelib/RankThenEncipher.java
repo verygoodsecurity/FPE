@@ -106,7 +106,7 @@ public class RankThenEncipher<M> extends FPECipher<M> {
 	/**
 	 * {@inheritDoc}
    *
-	 * @throws OutsideMessageSpaceException if plaintext is outside the message space.
+	 * @throws ch.bfh.fpelib.messageSpace.OutsideMessageSpaceException if plaintext is outside the message space.
 	 */
 	@Override
 	public M encrypt(M plaintext, Key key, byte[] tweak) {
@@ -119,7 +119,7 @@ public class RankThenEncipher<M> extends FPECipher<M> {
 	/**
 	 * {@inheritDoc}
    *
-	 * @throws OutsideMessageSpaceException if ciphertext is outside the message space.
+	 * @throws ch.bfh.fpelib.messageSpace.OutsideMessageSpaceException if ciphertext is outside the message space.
 	 */
 	@Override
 	public M decrypt(M ciphertext, Key key, byte[] tweak) {

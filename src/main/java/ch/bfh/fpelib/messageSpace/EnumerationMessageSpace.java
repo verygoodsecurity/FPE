@@ -26,7 +26,7 @@ public class EnumerationMessageSpace<M> extends MessageSpace<M> {
 	 * The enumList must not be empty.
 	 * It is then copied to prevent modifications and retain the order.
    *
-	 * @param enumList List with elements of the message space.
+	 * @param enumeration List with elements of the message space.
 	 */
 	public EnumerationMessageSpace(List<M> enumeration) {
 		if (enumeration == null || enumeration.size() == 0)

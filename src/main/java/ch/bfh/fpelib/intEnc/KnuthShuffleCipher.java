@@ -89,7 +89,7 @@ public class KnuthShuffleCipher extends IntegerCipher {
 	 * counterpart. When permutation table does not yet exists, it is generated.
    *
 	 * @param value plain-/ciphertext which is encrypted respectively decrypted 
-	 * @param key secret used generate permutation
+	 * @param keyProvided secret used generate permutation
 	 * @param tweak random bytes to prevent deterministic encryption
 	 * @param permutationTable table used for mapping
 	 * @return value after permutation
@@ -184,8 +184,6 @@ public class KnuthShuffleCipher extends IntegerCipher {
 	/**
 	 * When tweak do not have a length of 16 byte,
 	 * use PKCS#5 (PBKDF2 with SHA1-HMAC) derive it from provided tweak.
-   *
-	 * @param length desired key length in bytes
 	 */
 	private byte[] deriveTweak(byte[] tweak) {
 		
