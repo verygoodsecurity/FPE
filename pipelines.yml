@@ -32,7 +32,7 @@ pipelines:
           configFileName: ""
           autoPublishBuildInfo: true
           integrations:
-            - name: "artifactory"
+            - name: "mine"
             - name: "aws"
             - name: "GitHub"
           inputResources:
