@@ -21,7 +21,7 @@ pipelines:
   - name: "foo"
     configuration:
       environmentVariables:
-        readOnly: true
+        readOnly: {}
     steps:
       - name: "step_1"
         type: "MvnBuild"
