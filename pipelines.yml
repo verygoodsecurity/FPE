@@ -1,0 +1,58 @@
+resources:
+  - name: "verygood-github"
+    type: "GitRepo"
+    configuration:
+      gitProvider: "GitHub"
+      path: "verygoodsecurity/FPE"
+      branches:
+        include: "*"
+      buildOn:
+        commit: true
+        pullRequestCreate: false
+        pullRequestClose: false
+        releaseRequestCreate: false
+        tagCreate: false
+  - name: "bar"
+    type: "BuildInfo"
+    configuration:
+      sourceArtifactory: "foobar"
+pipelines:
+  - name: "foo"
+    configuration:
+      environmentVariables: {}
+    steps:
+      - name: "step_1"
+        type: "MvnBuild"
+        configuration:
+          sourceLocation: "."
+          mvnCommand: "clean verify site"
+          configFileLocation: "."
+          configFileName: ""
+          autoPublishBuildInfo: true
+          integrations:
+            - name: "artifactory"
+            - name: "aws"
+            - name: "GitHub"
+          inputResources:
+            - name: "verygood-github"
+          outputResources:
+            - name: "bar"
+          runtime:
+            type: "image"
+            image:
+              auto:
+                language: "java"
+                versions:
+                  - "8"
+        execution:
+          onStart:
+            - "javac -version"
+            - "mvn --version"
+          onComplete:
+            - "save_tests $res_java_app_resourcePath/target/surefire-reports/"
+      - name: "publish_build"
+        type: "PublishBuildInfo"
+        configuration: {}
+      - name: "promote_build"
+        type: "PromoteBuild"
+        configuration: {}
