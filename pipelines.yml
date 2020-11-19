@@ -19,9 +19,9 @@ resources:
 #      buildName: "foo"
 #      buildNumber: 1
 pipelines:
-  - name: "Maven Build"
+  - name: "build"
     steps:
-      - name: "build"
+      - name: "everything"
         type: "MvnBuild"
         configuration:
           sourceLocation: "."
