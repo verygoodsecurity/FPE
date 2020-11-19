@@ -4,7 +4,7 @@ orbs:
   maven: "circleci/maven@1.0.3"
 
 executors:
-  java:
+  "jdk":
     description: "OpenJDK 8"
     docker:
       - image: "cimg/openjdk:8.0"
@@ -16,8 +16,8 @@ workflows:
   "java-build":
     jobs:
       - "maven/test":
-          command: "clean verify site"
-          executor: "java"
-          post-steps:
-            - store_artifacts:
-                path: "target"
+        command: "clean verify site"
+        executor: "jdk"
+        post-steps:
+          - "store_artifacts":
+            path: "target"
