@@ -7,7 +7,7 @@ executors:
   java:
     description: "OpenJDK 8"
     docker:
-      - image: "cimg/openjdk:8"
+      - image: "cimg/openjdk:8.0"
 
 #jobs: {}
 
