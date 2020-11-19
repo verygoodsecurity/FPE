@@ -15,10 +15,11 @@ workflows:
   "java-build":
     jobs:
       - "maven/test":
-          command: "clean verify site"
           post-steps:
             - store_artifacts:
-                path: "target/*.jar"
+                path: "target"
+      - "maven/test":
+          command: "site"
 #        executor: "java"
 #        pre-steps: []
 #        post-steps: []
