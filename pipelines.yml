@@ -27,7 +27,7 @@ pipelines:
           sourceLocation: "."
           mvnCommand: "clean verify site"
           configFileLocation: "."
-          configFileName: "pom.xml"
+          configFileName: "settings.xml"
           autoPublishBuildInfo: false
           integrations:
             - name: "mine"

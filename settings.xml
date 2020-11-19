@@ -2,7 +2,13 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-    <servers></servers>
+    <servers>
+        <server>
+            <id>mine</id>
+            <username>${env.int_mine_user}</username>
+            <password>${env.int_mine_apikey}</password>
+        </server>
+    </servers>
     <mirrors></mirrors>
     <activeProfiles>
         <activeProfile>artifactory</activeProfile>
