@@ -11,10 +11,15 @@ executors:
 jobs: {}
 
 workflows:
-  build-and-test:
+  version: 2
+  "java-build":
     jobs:
-      - "maven/test"
+      - "maven/test":
         executor: "java"
-      - "maven/test"
-        command: "site"
-        executor: "java"
+#        pre-steps: []
+#        post-steps: []
+#      - "site":
+#        requires:
+#          - "verify"
+#        command: "site"
+#        executor: "java"
