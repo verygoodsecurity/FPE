@@ -1,0 +1,20 @@
+version: 2.1
+
+orbs:
+  maven: "circleci/maven@1.0.3"
+
+executors:
+  java:
+    description: "foo"
+    docker: "cimg/openjdk:8"
+
+jobs: {}
+
+workflows:
+  build-and-test:
+    jobs:
+      - "maven/test"
+        executor: "java"
+      - "maven/test"
+        command: "site"
+        executor: "java"
