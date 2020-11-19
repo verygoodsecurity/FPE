@@ -20,6 +20,9 @@ workflows:
                 path: "target"
       - "maven/test":
           command: "site"
+          post-steps:
+            - store_artifacts:
+                path: "target/site"
 #        executor: "java"
 #        pre-steps: []
 #        post-steps: []
