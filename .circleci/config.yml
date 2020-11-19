@@ -3,10 +3,10 @@ version: 2.1
 orbs:
   maven: "circleci/maven@1.0.3"
 
-#executors:
-#  java:
-#    description: "foo"
-#    docker: "cimg/openjdk:8"
+executors:
+  java:
+    description: "foo"
+    docker: "cimg/openjdk:8"
 
 #jobs: {}
 
@@ -15,19 +15,8 @@ workflows:
   "java-build":
     jobs:
       - "maven/test":
+          command: "clean verify site"
+          executor: "java"
           post-steps:
             - store_artifacts:
                 path: "target"
-      - "maven/test":
-          command: "site"
-          post-steps:
-            - store_artifacts:
-                path: "target/site"
-#        executor: "java"
-#        pre-steps: []
-#        post-steps: []
-#      - "site":
-#        requires:
-#          - "verify"
-#        command: "site"
-#        executor: "java"
