@@ -16,8 +16,8 @@ workflows:
   "java-build":
     jobs:
       - "maven/test":
-        command: "clean verify site"
-        executor: "jdk"
-        post-steps:
-          - "store_artifacts":
-            path: "target"
+          command: "clean verify site"
+          executor: "jdk"
+          post-steps:
+            - "store_artifacts":
+                path: "target"
