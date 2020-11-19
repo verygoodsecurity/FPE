@@ -1,3 +1,4 @@
+apiVersion: "v1.1"
 resources:
   - name: "verygoodgithub"
     type: "GitRepo"
@@ -11,34 +12,29 @@ resources:
         pullRequestCreate: false
         pullRequestClose: false
         tagCreate: false
-  - name: "bar"
-    type: "BuildInfo"
-    configuration:
-      sourceArtifactory: "mine"
-      buildName: "foo"
-      buildNumber: 1
+#  - name: "buildinfo"
+#    type: "BuildInfo"
+#    configuration:
+#      sourceArtifactory: "mine"
+#      buildName: "foo"
+#      buildNumber: 1
 pipelines:
-  - name: "foo"
-    configuration:
-      environmentVariables:
-        readOnly: {}
+  - name: "Maven Build"
     steps:
-      - name: "step_1"
+      - name: "build"
         type: "MvnBuild"
         configuration:
           sourceLocation: "."
           mvnCommand: "clean verify site"
           configFileLocation: "."
-          configFileName: ""
-          autoPublishBuildInfo: true
+          configFileName: "pom.xml"
+          autoPublishBuildInfo: false
           integrations:
             - name: "mine"
-            - name: "aws"
-            - name: "GitHub"
           inputResources:
             - name: "verygoodgithub"
-          outputResources:
-            - name: "bar"
+#          outputResources:
+#            - name: "buildinfo"
           runtime:
             type: "image"
             image:
