@@ -5,8 +5,9 @@ orbs:
 
 executors:
   java:
-    description: "foo"
-    docker: "cimg/openjdk:8"
+    description: "OpenJDK 8"
+    docker:
+      - image: "cimg/openjdk:8"
 
 #jobs: {}
 
