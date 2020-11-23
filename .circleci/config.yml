@@ -165,7 +165,7 @@ workflows:
       - "setup":
           context: artifact-publisher
       - "build":
-          runAfter:
+          requires:
             - "setup"
 #      - "maven/test":
 #          name: "build-test"
