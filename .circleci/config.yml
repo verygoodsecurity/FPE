@@ -3,6 +3,24 @@ version: 2.1
 #orbs:
 #  maven: "circleci/maven@1.0.3"
 
+parameters:
+  aws_account_id:
+    description: ""
+    type: string
+    default: "883127560329"
+  aws_profile:
+    description: ""
+    type: string
+    default: "dev/vault"
+  aws_region:
+    description: ""
+    type: string
+    default: "us-west-2"
+  aws_role:
+    description: ""
+    type: string
+    default: "arn:aws:iam::883127560329:role/VGSStageDeploy"
+
 #executors:
 #  "jdk8":
 #    description: "OpenJDK 8"
@@ -38,28 +56,50 @@ commands:
           command: << parameters.executable >> << parameters.goals >>
 
 jobs:
-#  "setup":
-#    description: "make Maven configuration files"
-#    steps:
-#      - persist_to_workspace:
-#          root: "~"
-#          paths:
+  "setup":
+    description: "make Maven configuration files"
+    steps:
+      - run:
+          name: "Generate Maven settings."
+          command: |
+            #!/usr/bin/env bash
+            mkdir -p ~/.m2
+      - run:
+          name: "Generate AWS credentials file"
+          command: |
+            #!/usr/bin/env bash
+            mkdir -p ~/.aws
+            echo "
+            [default]
+            region = << pipeline.parameters.aws_region >>
+            aws_access_key_id = $AWS_ACCESS_KEY_ID
+            aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
+
+            [dev/vault]
+            region = << pipeline.parameters.aws_region >>
+            role_arn = << pipeline.parameters.aws_role >>
+            source_profile = default
+            " >> ~/.aws/credentials
+      - persist_to_workspace:
+          root: "~"
+          paths:
 #            - ".m2/settings.xml"
 #            - ".m2/toolchain.xml"
-#            - ".m2"
+            - ".m2"
+            - ".aws"
   "build":
     description: "foo"
     docker:
       - image: "maven:3.6-openjdk-8"
 #    working_directory: "~/project"
     environment:
-      AWS_ACCOUNT_ID: "883127560329"
-      AWS_PROFILE: "dev/vault"
-      AWS_DEFAULT_REGION: "us-west-2"
-      AWS_REGION: "us-west-2"
+      AWS_ACCOUNT_ID: << pipeline.parameters.aws_account_id >>
+      AWS_PROFILE: << pipeline.parameters.aws_profile >>
+      AWS_DEFAULT_REGION: << pipeline.parameters.aws_region >>
+      AWS_REGION: << pipeline.parameters.aws_region >>
     steps:
-#      - attach_workspace:
-#          at: "~"
+      - attach_workspace:
+          at: "~"
       - checkout:
           path: "."
       - restore_cache:
@@ -70,12 +110,6 @@ jobs:
             - "maven"
       - maven:
           goals: "dependency:go-offline"
-      - save_cache:
-          name: "Saving Cache"
-          when: "on_success"
-          key: maven-fpelib-{{ checksum "pom.xml" }}
-          paths:
-            - "~/.m2/repository"
       - maven:
           goals: "clean verify"
       - store_test_results:
@@ -86,6 +120,12 @@ jobs:
           path: "target"
       - maven:
           goals: "deploy"
+      - save_cache:
+          name: "Saving Cache"
+          when: "always"
+          key: maven-fpelib-{{ checksum "pom.xml" }}
+          paths:
+            - "~/.m2/repository"
 #  "deploy":
 #    description: "Deploy to Artifactory"
 #    steps:
@@ -115,8 +155,9 @@ workflows:
   version: 2
   "java-build":
     jobs:
-      - "build":
+      - "setup":
           context: artifact-publisher
+      - "build": {}
 #      - "maven/test":
 #          name: "build-test"
 #          command: "clean verify site"
