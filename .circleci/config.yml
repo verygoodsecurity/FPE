@@ -53,6 +53,7 @@ jobs:
       - image: "maven:3.6-openjdk-8"
 #    working_directory: "~/project"
     environment:
+      AWS_ACCOUNT_ID: "883127560329"
       AWS_PROFILE: "dev/vault"
       AWS_DEFAULT_REGION: "us-west-2"
       AWS_REGION: "us-west-2"
@@ -114,7 +115,8 @@ workflows:
   version: 2
   "java-build":
     jobs:
-      - "build": {}
+      - "build":
+          context: artifact-publisher
 #      - "maven/test":
 #          name: "build-test"
 #          command: "clean verify site"
