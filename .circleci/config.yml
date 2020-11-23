@@ -32,7 +32,7 @@ commands:
       executable:
         description: "The Maven executable."
         type: string
-        default: "mv"
+        default: "mvn"
     steps:
       - run:
           command: << parameters.executable >> << parameters.goals >>
