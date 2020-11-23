@@ -165,6 +165,8 @@ workflows:
       - "setup":
           context: artifact-publisher
       - "build": {}
+        runAfter:
+          - "setup"
 #      - "maven/test":
 #          name: "build-test"
 #          command: "clean verify site"
