@@ -76,7 +76,6 @@ jobs:
       - store_test_results:
           path: "target/surefire-reports"
       - maven:
-          name: "Generating Cache"
           goals: "site"
       - store_artifacts:
           path: "target"
