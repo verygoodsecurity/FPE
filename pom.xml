@@ -32,8 +32,8 @@
         <url>https://github.com/verygoodsecurity/FPE</url>
         <connection>scm:git:https://github.com/verygoodsecurity/FPE.git</connection>
         <developerConnection>scm:git:git@github.com:verygoodsecurity/FPE.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <issueManagement />
     <distributionManagement>
         <repository>

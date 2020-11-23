@@ -1,8 +1,5 @@
 version: 2.1
 
-#orbs:
-#  maven: "circleci/maven@1.0.3"
-
 parameters:
   aws_account_id:
     description: ""
@@ -20,24 +17,10 @@ parameters:
     description: ""
     type: string
     default: "arn:aws:iam::883127560329:role/VGSStageDeploy"
-
-#executors:
-#  "jdk8":
-#    description: "OpenJDK 8"
-#    docker:
-#      - image: "cimg/openjdk:8.0"
-#  "jdk11":
-#    description: "OpenJDK 11"
-#    docker:
-#      - image: "cimg/openjdk:11.0"
-#  "jdk14":
-#    description: "OpenJDK 14"
-#    docker:
-#      - image: "cimg/openjdk:14.0"
-#  "maven8":
-#    description: "Maven on JDK 8"
-#    docker:
-#      - image: "maven:3.6-openjdk-8"
+  cache_key_prefix:
+    description: ""
+    type: string
+    default: "fpelib"
 
 commands:
   maven:
@@ -90,15 +73,12 @@ jobs:
       - persist_to_workspace:
           root: "~"
           paths:
-#            - ".m2/settings.xml"
-#            - ".m2/toolchain.xml"
             - ".m2"
             - ".aws"
   "build":
     description: "foo"
     docker:
       - image: "maven:3.6-openjdk-8"
-#    working_directory: "~/project"
     environment:
       AWS_ACCOUNT_ID: << pipeline.parameters.aws_account_id >>
       AWS_PROFILE: << pipeline.parameters.aws_profile >>
@@ -112,8 +92,8 @@ jobs:
       - restore_cache:
           name: "Restoring Cache"
           keys:
-            - maven-fpelib-{{ checksum "pom.xml" }}
-            - "maven-fpelib"
+            - maven-<< pipeline.parameters.aws_account_id >>-{{ checksum "pom.xml" }}
+            - "maven-<< pipeline.parameters.aws_account_id >>"
             - "maven"
       - maven:
           goals: "dependency:go-offline"
@@ -130,33 +110,9 @@ jobs:
       - save_cache:
           name: "Saving Cache"
           when: "always"
-          key: maven-fpelib-{{ checksum "pom.xml" }}
+          key: maven-<< pipeline.parameters.aws_account_id >>-{{ checksum "pom.xml" }}
           paths:
             - "~/.m2/repository"
-#  "deploy":
-#    description: "Deploy to Artifactory"
-#    steps:
-#      - run:
-#          name: "deploy"
-#          command: "curl -fL https://getcli.jfrog.io | sh"
-#          shell: "/bin/bash -eo pipefail"
-#          environment: { }
-#          background: false
-#          working_directory: "."
-#          no_output_timeout: "10m"
-#          when: "on_success"
-#      - run:
-#          environment:
-#            - name: "URL"
-#              value: "https://kentrosenkoettervgsio.jfrog.io/artifactory/"
-#            - name: "CI"
-#              value: "true"
-#          command: |
-#            ./jfrog rt config --url $URL --user $USER --apikey $APIKEY --interactive=false
-#            ./jfrog rt u "multi*/*.jar" libs-snapshot-local --build-name=foobar --build-number=$CIRCLE_BUILD_NUM --flat=false
-#            ./jfrog rt bce foobar $CIRCLE_BUILD_NUM
-#            ./jfrog rt bp foobar $CIRCLE_BUILD_NUM
-#          background: false
 
 workflows:
   version: 2
@@ -167,10 +123,3 @@ workflows:
       - "build":
           requires:
             - "setup"
-#      - "maven/test":
-#          name: "build-test"
-#          command: "clean verify site"
-#          executor: "maven8"
-#          post-steps:
-#            - "store_artifacts":
-#                path: "target"
