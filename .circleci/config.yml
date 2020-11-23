@@ -1,23 +1,118 @@
 version: 2.1
 
-orbs:
-  maven: "circleci/maven@1.0.3"
+#orbs:
+#  maven: "circleci/maven@1.0.3"
 
-executors:
-  "jdk":
-    description: "OpenJDK 8"
+#executors:
+#  "jdk8":
+#    description: "OpenJDK 8"
+#    docker:
+#      - image: "cimg/openjdk:8.0"
+#  "jdk11":
+#    description: "OpenJDK 11"
+#    docker:
+#      - image: "cimg/openjdk:11.0"
+#  "jdk14":
+#    description: "OpenJDK 14"
+#    docker:
+#      - image: "cimg/openjdk:14.0"
+#  "maven8":
+#    description: "Maven on JDK 8"
+#    docker:
+#      - image: "maven:3.6-openjdk-8"
+
+commands:
+  maven:
+    description: "Run Maven"
+    parameters:
+      goals:
+        description: "The Maven goals to run."
+        type: string
+        default: "clean verify site"
+      executable:
+        description: "The Maven executable."
+        type: string
+        default: "mv"
+    steps:
+      - run:
+          command: << parameters.executable >> << parameters.goals >>
+
+jobs:
+#  "setup":
+#    description: "make Maven configuration files"
+#    steps:
+#      - persist_to_workspace:
+#          root: "~"
+#          paths:
+#            - ".m2/settings.xml"
+#            - ".m2/toolchain.xml"
+#            - ".m2"
+  "build":
+    description: "foo"
     docker:
-      - image: "cimg/openjdk:8.0"
-
-#jobs: {}
+      - image: "maven:3.6-openjdk-8"
+#    working_directory: "~/project"
+    steps:
+#      - attach_workspace:
+#          at: "~"
+      - checkout:
+          path: "."
+      - restore_cache:
+          name: "Restoring Cache"
+          keys:
+            - maven-fpelib-{{ checksum "pom.xml" }}
+            - "maven-fpelib"
+            - "maven"
+      - maven:
+          goals: "dependency:go-offline"
+      - save_cache:
+          name: "Saving Cache"
+          when: "always"
+          key: maven-fpelib-{{ checksum "pom.xml" }}
+          paths:
+            - "~/.m2/repository"
+      - maven:
+          goals: "clean verify"
+      - maven:
+          goals: "site"
+      - store_test_results:
+          path: "target/surefire-reports"
+      - store_artifacts:
+          path: "target"
+#  "deploy":
+#    description: "Deploy to Artifactory"
+#    steps:
+#      - run:
+#          name: "deploy"
+#          command: "curl -fL https://getcli.jfrog.io | sh"
+#          shell: "/bin/bash -eo pipefail"
+#          environment: { }
+#          background: false
+#          working_directory: "."
+#          no_output_timeout: "10m"
+#          when: "on_success"
+#      - run:
+#          environment:
+#            - name: "URL"
+#              value: "https://kentrosenkoettervgsio.jfrog.io/artifactory/"
+#            - name: "CI"
+#              value: "true"
+#          command: |
+#            ./jfrog rt config --url $URL --user $USER --apikey $APIKEY --interactive=false
+#            ./jfrog rt u "multi*/*.jar" libs-snapshot-local --build-name=foobar --build-number=$CIRCLE_BUILD_NUM --flat=false
+#            ./jfrog rt bce foobar $CIRCLE_BUILD_NUM
+#            ./jfrog rt bp foobar $CIRCLE_BUILD_NUM
+#          background: false
 
 workflows:
   version: 2
   "java-build":
     jobs:
-      - "maven/test":
-          command: "clean verify site"
-          executor: "jdk"
-          post-steps:
-            - "store_artifacts":
-                path: "target"
+      - "build": {}
+#      - "maven/test":
+#          name: "build-test"
+#          command: "clean verify site"
+#          executor: "maven8"
+#          post-steps:
+#            - "store_artifacts":
+#                path: "target"
