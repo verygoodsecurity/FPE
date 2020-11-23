@@ -92,8 +92,8 @@ jobs:
       - restore_cache:
           name: "Restoring Cache"
           keys:
-            - maven-<< pipeline.parameters.aws_account_id >>-{{ checksum "pom.xml" }}
-            - "maven-<< pipeline.parameters.aws_account_id >>"
+            - maven-<< pipeline.parameters.cache_key_prefix >>-{{ checksum "pom.xml" }}
+            - "maven-<< pipeline.parameters.cache_key_prefix >>"
             - "maven"
       - maven:
           goals: "dependency:go-offline"
@@ -110,7 +110,7 @@ jobs:
       - save_cache:
           name: "Saving Cache"
           when: "always"
-          key: maven-<< pipeline.parameters.aws_account_id >>-{{ checksum "pom.xml" }}
+          key: maven-<< pipeline.parameters.cache_key_prefix >>-{{ checksum "pom.xml" }}
           paths:
             - "~/.m2/repository"
 
