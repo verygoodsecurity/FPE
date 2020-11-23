@@ -58,6 +58,13 @@ commands:
 jobs:
   "setup":
     description: "make Maven configuration files"
+    docker:
+      - image: "maven:3.6-openjdk-8"
+    environment:
+      AWS_ACCOUNT_ID: << pipeline.parameters.aws_account_id >>
+      AWS_PROFILE: << pipeline.parameters.aws_profile >>
+      AWS_DEFAULT_REGION: << pipeline.parameters.aws_region >>
+      AWS_REGION: << pipeline.parameters.aws_region >>
     steps:
       - run:
           name: "Generate Maven settings."
