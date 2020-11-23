@@ -52,6 +52,10 @@ jobs:
     docker:
       - image: "maven:3.6-openjdk-8"
 #    working_directory: "~/project"
+    environment:
+      AWS_PROFILE: "dev/vault"
+      AWS_DEFAULT_REGION: "us-west-2"
+      AWS_REGION: "us-west-2"
     steps:
 #      - attach_workspace:
 #          at: "~"
