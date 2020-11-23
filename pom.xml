@@ -33,7 +33,7 @@
     <scm>
         <url>https://github.com/verygoodsecurity/FPE</url>
         <connection>scm:git:https://github.com/verygoodsecurity/FPE.git</connection>
-        <developerConnection>scm:git:ssh:git@github.com:verygoodsecurity/FPE.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:verygoodsecurity/FPE.git</developerConnection>
     </scm>
     <issueManagement></issueManagement>
     <distributionManagement>
