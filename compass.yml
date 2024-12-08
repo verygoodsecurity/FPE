@@ -23,22 +23,6 @@ relationships: {}
 labels:
   - 'language:java'
   - 'source:github'
-customFields:
-  - name: Logging
-    type: text
-    value: v2023-05-01
-  - name: Metrics
-    type: text
-    value: null
-  - name: Service Name
-    type: text
-    value: fpe
-  - name: Tracing
-    type: text
-    value: v2023-05-01
-  - name: statusIO
-    type: text
-    value: null
 
 # Learn more about formatting compass.yml:
 # https://go.atlassian.com/compass-yml-format
