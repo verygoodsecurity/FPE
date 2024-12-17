@@ -1,0 +1,28 @@
+name: FPE
+id: 'ari:cloud:compass:83673fa7-fd28-4f4a-9738-f584064570a7:component/db43f86d-85fe-42e1-954d-457f5a4082b8/e61bb397-63db-46a3-8b2a-da6bab52a479'
+description: VGS fork of FPE
+configVersion: 1
+typeId: LIBRARY
+ownerId: 'ari:cloud:identity::team/64cfeb5f-5d71-4231-9332-0519bdd112bb-48'
+fields:
+  tier: 4
+links:
+  - name: fpe
+    type: REPOSITORY
+    url: 'https://github.com/verygoodsecurity/FPE'
+  - name: ''
+    type: CHAT_CHANNEL
+    url: 'https://getverygood.slack.com/archives/C057XN649U5'
+  - name: ''
+    type: PROJECT
+    url: 'https://verygoodsecurity.atlassian.net/jira/software/c/projects/VAULT/boards/447'
+  - name: CircleCI
+    type: PROJECT
+    url: 'https://app.circleci.com/pipelines/github/verygoodsecurity/FPE'
+relationships: {}
+labels:
+  - 'language:java'
+  - 'source:github'
+
+# Learn more about formatting compass.yml:
+# https://go.atlassian.com/compass-yml-format
